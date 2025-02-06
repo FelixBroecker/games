@@ -30,13 +30,13 @@ class DrawCard:
         u=  f"{card[1]:<9}"
         l=  f"{card[1]:>2}"
         self.cards = [
-                f"/===========\\",
-                f"| {u} |",
-                f"|           |",
-                f"|     {symbol[card[0]]}     |",
-                f"|           |",
-                f"|        {l} |",
-                f"\\===========/",
+                f"/============\\",
+                f"| {u}  |",
+                f"|            |",
+                f"|     {symbol[card[0]]}      |",
+                f"|            |",
+                f"|         {l} |",
+                f"\\============/",
             ]
 
     def lst_to_str(self) -> str:

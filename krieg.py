@@ -72,7 +72,7 @@ f"""/===========\\
         """"""
         space = 2
         cardlength = 7
-        cardwidth = 13
+        cardwidth = 14
 
         filler = (self.fieldwidth//2 - len(cards_a) *
                   (space+cardwidth) + self.fieldspace//2)
