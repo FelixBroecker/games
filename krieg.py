@@ -250,6 +250,7 @@ f"""/===========\\
                     out = self.end_game(hand_a, hand_b, out)
                     self.print_out(out, length)
                     exit()
+                old_b = hand_b[-1:][::-1]
                 while same:
                     # check if Krisch is possible
                     if len(hand_a) + len(discard_pile_a) < n:
@@ -282,7 +283,7 @@ f"""/===========\\
 
                     cards = self.show_cards(
                         hand_a[-n:][::-1],
-                        [],
+                        old_b,
                         mask = [True,False,True]*(n//3)
                         )
                     out += cards
@@ -349,6 +350,7 @@ f"""/===========\\
                         del hand_b[-n:]
                     else:
                         n += 3
+
 
             if not hand_a:
                 hand_a = discard_pile_a.copy()
