@@ -79,7 +79,6 @@ f"""/===========\\
 
         if not mask:
             mask = [True for _ in cards_a]
-            print(mask)
 
         for i, card in enumerate(cards_a):
             if not mask[i]:
@@ -113,9 +112,18 @@ f"""/===========\\
             res = res + res_b
         return res.cards
 
+    def end_game(self, hand_a, hand_b, out):
+        """Terminates the game and prints a message."""
+        if hand_a>hand_b:
+            out.append("Player A won!")
+        else:
+            out.append("Player B won!")
+        return out
+
+
     def game_round(self, card_deck):
         """"""
-        length = 12
+        length = 13
         user_input = True
 
         space = " "
@@ -126,7 +134,7 @@ f"""/===========\\
         out = []
         out.append("Shuffle the cards.")
         self.print_out(out, length)
-
+        random.seed(3)
         random.shuffle(card_deck)
         time.sleep(self.wait)
 
@@ -238,7 +246,10 @@ f"""/===========\\
 
                 same = True
                 n=3
-
+                if same and len(hand_a)+len(discard_pile_a)<n or len(hand_b)+len(discard_pile_b) < n:
+                    out = self.end_game(hand_a, hand_b, out)
+                    self.print_out(out, length)
+                    exit()
                 while same:
                     # check if Krisch is possible
                     if len(hand_a) + len(discard_pile_a) < n:
@@ -261,7 +272,11 @@ f"""/===========\\
                         hand_b = discard_pile_b.copy() + hand_b
                         discard_pile_b = []
 
-                    same = self.value[hand_a[-n][1]] == self.value[hand_b[-n][1]]
+                    try:
+                        same = self.value[hand_a[-n][1]] == self.value[hand_b[-n][1]]
+                    except IndexError:
+                        same = False
+
 
                     del out[-7:]
 
@@ -285,7 +300,7 @@ f"""/===========\\
                     cards = self.show_cards(
                         hand_a[-n:][::-1],
                         hand_b[-n:][::-1],
-                        mask = [True,False,True]
+                        mask = [True,False,True]*(n//3)
                         )
                     out += cards
 
@@ -345,10 +360,13 @@ f"""/===========\\
             time.sleep(self.wait)
 
         if hand_a:
-            out.append("Player A won!")
+            self.end_game(hand_a, hand_b, out)
+            self.print_out(out, length)
+            exit()
         else:
-            out.append("Player B won!")
-        self.print_out(out, length)
+            self.end_game(hand_a, hand_b, out)
+            self.print_out(out, length)
+            exit()
 
 
 
