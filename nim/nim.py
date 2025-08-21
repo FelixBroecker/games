@@ -11,23 +11,26 @@ if __name__ == "__main__":
         pads = [" " * (n_rows - i - 1) for i in range(n_rows)]
         i = 0
         idxs = ("1st", "2nd")
+        print("\x1b[?1049h")
         while len(rows) > 0:
-            print()
-            for _ in range(n_rows - len(rows)):
-                print()
-            for row, pad in zip(rows, pads):
-                string = "|" * row + pad
-                print(" " * (width - len(string)) + string + f" {row}")
+
             num = ""
             while not num.isdigit() or not (
                 1 <= int(num) <= min(move_limit, rows[0])
             ):
+                print("\x1b[H\x1b[J", end="")
+                for _ in range(n_rows - len(rows)):
+                    print()
+                for row, pad in zip(rows, pads):
+                    string = "|" * row + pad
+                    print(" " * (width - len(string)) + string + f" {row}")
                 num = input(f"{idxs[i]} player: ")
             i = (i + 1) % 2
             rows[0] -= int(num)
             if rows[0] == 0:
                 del rows[0]
                 del pads[0]
+
         print()
         print(f"{idxs[i]} player wins!")
     else:
