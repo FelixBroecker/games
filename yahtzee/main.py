@@ -11,6 +11,7 @@ class Yahtzee():
         self.hold = [False, False, False, False, False]
         self.players = []
         self.dw = Draw()
+        self.round = 0
 
     def get_key(self):
         """get key from user"""
@@ -23,6 +24,7 @@ class Yahtzee():
     #        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         self.dw.draw_information("Which dices do you want to hold? Please give the positions as numbers without spaces in between.")
         key = input()
+        
         return key
 
     def ask_player_amount(self):
@@ -35,13 +37,14 @@ class Yahtzee():
         player = input()
         self.players.append(player)
 
-    def roll(self):
+    def roll(self, player_round: int = 0) -> None:
         """Roll the dices that are not hold"""
         for i in range(5):
             if not self.hold[i]:
                 self.dices[i] = random.randint(1, 6)
+        
+        self.dw.draw_all_dices(self.dices, self.hold, self.round, player_round)
         self.reset_dices()
-        self.dw.draw_all_dices(self.dices)
         ...
 
     def keep_dice(self):
@@ -72,7 +75,7 @@ class Yahtzee():
                 for i in range(3):
                     if all(self.hold) == True:
                         break
-                    self.roll()
+                    self.roll(i)
                     if i < 2:
                         self.keep_dice()
                 #TODO: initialize game card for each player
