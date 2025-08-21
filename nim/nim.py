@@ -18,9 +18,7 @@ if __name__ == "__main__":
             while not num.isdigit() or not (
                 1 <= int(num) <= min(move_limit, rows[0])
             ):
-                print("\x1b[H\x1b[J", end="")
-                for _ in range(n_rows - len(rows)):
-                    print()
+                print("\x1b[H\x1b[J" + "\n" * (n_rows - len(rows)), end="")
                 for row, pad in zip(rows, pads):
                     string = "|" * row + pad
                     print(" " * (width - len(string)) + string + f" {row}")
@@ -31,7 +29,7 @@ if __name__ == "__main__":
                 del rows[0]
                 del pads[0]
 
-        print()
+        print("\x1b[H\x1b[J" + "\n" * n_rows, end="")
         print(f"{idxs[i]} player wins!")
     else:
         print("Usage: python nim.py <number-of-rows> <move-limit>")
