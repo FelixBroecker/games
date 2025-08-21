@@ -13,6 +13,8 @@ if __name__ == "__main__":
         idxs = ("1st", "2nd")
         while len(rows) > 0:
             print()
+            for _ in range(n_rows - len(rows)):
+                print()
             for row, pad in zip(rows, pads):
                 string = "|" * row + pad
                 print(" " * (width - len(string)) + string + f" {row}")
