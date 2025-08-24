@@ -6,6 +6,7 @@ import termios
 from CardDeck import CardDeck
 from DrawCard import DrawCard
 
+
 class Krich:
     def __init__(self):
         self.wait = 1.5
@@ -47,19 +48,18 @@ class Krich:
             "spades": "♠️",
         }
         if typ == "plain":
-            return(card)
+            return card
         elif typ == "illustrate":
-            u=  f"{card[1]:<9}"
-            l=  f"{card[1]:>2}"
-            return(
-f"""/===========\\
+            u = f"{card[1]:<9}"
+            l = f"{card[1]:>2}"
+            return f"""/===========\\
 | {u} |
 |           |
 |     {symbol[card[0]]}     |
 |           |
 |        {l} |
 \\===========/
-""")
+"""
 
     def print_out(self, out, length):
         """"""
@@ -74,8 +74,11 @@ f"""/===========\\
         cardlength = 7
         cardwidth = 14
 
-        filler = (self.fieldwidth//2 - len(cards_a) *
-                  (space+cardwidth) + self.fieldspace//2)
+        filler = (
+            self.fieldwidth // 2
+            - len(cards_a) * (space + cardwidth)
+            + self.fieldspace // 2
+        )
 
         if not mask:
             mask = [True for _ in cards_a]
@@ -86,14 +89,14 @@ f"""/===========\\
             a = DrawCard([])
             a.get_depiction(card)
             s = DrawCard([])
-            s.card_space(space,cardlength)
+            s.card_space(space, cardlength)
             if i == 0:
                 res_a = s + a
             else:
                 res_a = (res_a + s) + a
 
         s = DrawCard([])
-        s.card_space(filler,cardlength)
+        s.card_space(filler, cardlength)
         res = res_a + s
 
         if cards_b:
@@ -103,7 +106,7 @@ f"""/===========\\
                 a = DrawCard([])
                 a.get_depiction(card)
                 s = DrawCard([])
-                s.card_space(space,cardlength)
+                s.card_space(space, cardlength)
                 if i == 0:
                     res_b = a
                 else:
@@ -114,12 +117,11 @@ f"""/===========\\
 
     def end_game(self, hand_a, hand_b, out):
         """Terminates the game and prints a message."""
-        if hand_a>hand_b:
+        if hand_a > hand_b:
             out.append("Player A won!")
         else:
             out.append("Player B won!")
         return out
-
 
     def game_round(self, card_deck):
         """"""
@@ -141,8 +143,8 @@ f"""/===========\\
         out.append("Deal the cards.")
         self.print_out(out, length)
 
-        hand_a = card_deck[:len(card_deck)//2]
-        hand_b = card_deck[len(card_deck)//2:]
+        hand_a = card_deck[: len(card_deck) // 2]
+        hand_b = card_deck[len(card_deck) // 2 :]
         discard_pile_a = []
         discard_pile_b = []
         time.sleep(self.wait)
@@ -158,17 +160,24 @@ f"""/===========\\
 
         time.sleep(self.wait)
 
-
-        while len(hand_a)+len(discard_pile_a) and len(hand_b)+len(discard_pile_b):
+        while len(hand_a) + len(discard_pile_a) and len(hand_b) + len(
+            discard_pile_b
+        ):
             out = []
             out.append(format_2words.format("Player A", "Player B"))
-            out.append(format_4words.format(
-                "pile", "discard pile", "pile", "discard pile"
-                ))
-            out.append(format_4words.format(
-                f"{len(hand_a)}", f"{len(discard_pile_a)}",
-                f"{len(hand_b)}", f"{len(discard_pile_b)}"
-                ))
+            out.append(
+                format_4words.format(
+                    "pile", "discard pile", "pile", "discard pile"
+                )
+            )
+            out.append(
+                format_4words.format(
+                    f"{len(hand_a)}",
+                    f"{len(discard_pile_a)}",
+                    f"{len(hand_b)}",
+                    f"{len(discard_pile_b)}",
+                )
+            )
             out.append("")
             self.print_out(out, length)
 
@@ -189,15 +198,14 @@ f"""/===========\\
                         self.wait = 0
                     elif key == "w":
                         out.append("Felix won the game!")
-                        self.print_out(out,length)
-                        exit()
+                        self.print_out(out, length)
+                        sys.exit()
                     elif key == "e":
                         out.append("Brutal kill")
-                        self.print_out(out,length)
-                        exit()
+                        self.print_out(out, length)
+                        sys.exit()
 
-
-            cards = self.show_cards([hand_a[-1]],[])
+            cards = self.show_cards([hand_a[-1]], [])
             out += cards
             self.print_out(out, length)
             del out[-7:]
@@ -209,7 +217,7 @@ f"""/===========\\
                     if key == "b":
                         invalid = False
 
-            cards = self.show_cards([hand_a[-1]],[hand_b[-1]])
+            cards = self.show_cards([hand_a[-1]], [hand_b[-1]])
             out += cards
             self.print_out(out, length)
 
@@ -245,8 +253,12 @@ f"""/===========\\
                 time.sleep(self.wait)
 
                 same = True
-                n=3
-                if same and len(hand_a)+len(discard_pile_a)<n or len(hand_b)+len(discard_pile_b) < n:
+                n = 3
+                if (
+                    same
+                    and len(hand_a) + len(discard_pile_a) < n
+                    or len(hand_b) + len(discard_pile_b) < n
+                ):
                     out = self.end_game(hand_a, hand_b, out)
                     self.print_out(out, length)
                     exit()
@@ -266,26 +278,28 @@ f"""/===========\\
                         discard_pile_b = []
                         break
                     # check if discarded pile has to be unied with hand cards
-                    if len(hand_a)<n:
+                    if len(hand_a) < n:
                         hand_a = discard_pile_a.copy() + hand_a
                         discard_pile_a = []
-                    if len(hand_b)<n:
+                    if len(hand_b) < n:
                         hand_b = discard_pile_b.copy() + hand_b
                         discard_pile_b = []
 
                     try:
-                        same = self.value[hand_a[-n][1]] == self.value[hand_b[-n][1]]
+                        same = (
+                            self.value[hand_a[-n][1]]
+                            == self.value[hand_b[-n][1]]
+                        )
                     except IndexError:
                         same = False
-
 
                     del out[-7:]
 
                     cards = self.show_cards(
                         hand_a[-n:][::-1],
                         old_b,
-                        mask = [True,False,True]*(n//3)
-                        )
+                        mask=[True, False, True] * (n // 3),
+                    )
                     out += cards
 
                     if user_input:
@@ -301,8 +315,8 @@ f"""/===========\\
                     cards = self.show_cards(
                         hand_a[-n:][::-1],
                         hand_b[-n:][::-1],
-                        mask = [True,False,True]*(n//3)
-                        )
+                        mask=[True, False, True] * (n // 3),
+                    )
                     out += cards
 
                     if user_input:
@@ -320,19 +334,17 @@ f"""/===========\\
                     cards = self.show_cards(
                         hand_a[-n:][::-1],
                         hand_b[-n:][::-1],
-                        )
+                    )
                     out += cards
                     self.print_out(out, length)
 
-
-                    time.sleep(2*self.wait)
+                    time.sleep(2 * self.wait)
 
                     if self.value[hand_a[-n][1]] > self.value[hand_b[-n][1]]:
 
                         out.append("A is larger.")
                         self.print_out(out, length)
                         del out[-1]
-
 
                         discard_pile_a += hand_a[-n:]
                         discard_pile_a += hand_b[-n:]
@@ -350,7 +362,6 @@ f"""/===========\\
                         del hand_b[-n:]
                     else:
                         n += 3
-
 
             if not hand_a:
                 hand_a = discard_pile_a.copy()
@@ -371,9 +382,7 @@ f"""/===========\\
             exit()
 
 
-
-
-deck  = input("Choose a deck to play with (32, 52, 55, 2x32, 2x52, 2x55)")
+deck = input("Choose a deck to play with (32, 52, 55, 2x32, 2x52, 2x55)")
 print("\033[H\033[J", end="")
 cD = CardDeck(deck=deck, pattern="german")
 deck = cD.card_deck
